@@ -1,5 +1,5 @@
 # Data and analysis scripts for:
-## Forcier et al. (2018) *Measuring cis-regulatory energetics in living cells using allelic manifolds.* 
+## Forcier et al. *Measuring cis-regulatory energetics in living cells using allelic manifolds.* bioRxiv doi:10.1101/380972 (2018) 
 
 Directory structure:
 * ``code/``: Python analysis scripts and Jupyter notebooks
