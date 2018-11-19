@@ -1,6 +1,5 @@
 # Data and analysis scripts for:
-## *Precision dissection of cis-regulatory energetics in living cells.* 
-## Forcier et al., bioRxiv preprint (in process)
+## Forcier et al. (2018) *Measuring cis-regulatory energetics in living cells using allelic manifolds.* 
 
 Directory structure:
 * ``code/``: Python analysis scripts and Jupyter notebooks
