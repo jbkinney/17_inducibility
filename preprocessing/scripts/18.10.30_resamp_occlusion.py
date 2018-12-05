@@ -304,7 +304,7 @@ if recalc:
     
     lthetas, lsets_used, lpvals = boot_resampler_oc(construct, init, cycles)
     
-    resamp=pd.DataFrame(lthetas, columns=['log_tmax','log_tbackground','log_F'])
+    resamp=pd.DataFrame(lthetas, columns=['log_tsat','log_tbackground','log_F'])
     resamp['P_vals']=[x for x in lpvals]
     resamp['sets_used']=[x for x in lsets_used]
     

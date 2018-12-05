@@ -108,18 +108,22 @@ corrected_meas_sum={'name':[],'location':[], 'log_t+':[], 'dlog_t+':[], 'log_t-'
 
 for n in range(len(seq_sum['location'])):
     loc=seq_sum['location'][n]
+
+    if np.isnan(corrected_medians[loc]['250.0']):
+        continue
+    else:
+        if np.isnan(corrected_medians[loc]['0.0']):
+            continue
+        else:
+            corrected_meas_sum['dlog_t-'].append((np.std(np.log(corrected_vals[loc]['0.0']), ddof=1)))
+    
+        corrected_meas_sum['dlog_t+'].append((np.std(np.log(corrected_vals[loc]['250.0']), ddof=1)))
+    corrected_meas_sum['log_t-'].append(np.log(corrected_medians[loc]['0.0']))
+    
     corrected_meas_sum['location'].append(loc)
     corrected_meas_sum['name'].append(cons_names['short_name'][loc])
     corrected_meas_sum['log_t+'].append(np.log(corrected_medians[loc]['250.0']))
-    if np.isnan(corrected_medians[loc]['250.0']):
-        corrected_meas_sum['dlog_t+'].append(np.NaN)
-    else:
-        corrected_meas_sum['dlog_t+'].append((np.std(np.log(corrected_vals[loc]['250.0']), ddof=1)))
-    corrected_meas_sum['log_t-'].append(np.log(corrected_medians[loc]['0.0']))
-    if np.isnan(corrected_medians[loc]['0.0']):
-        corrected_meas_sum['dlog_t-'].append(np.NaN)
-    else:
-        corrected_meas_sum['dlog_t-'].append((np.std(np.log(corrected_vals[loc]['0.0']), ddof=1)))
+    
     corrected_meas_sum['num_t+'].append(len(corrected_vals[loc]['250.0']))
     corrected_meas_sum['num_t-'].append(len(corrected_vals[loc]['0.0']))
     corrected_meas_sum['spacing'].append(seq_sum['spacing'][n])
@@ -140,19 +144,6 @@ cAMP_sum={'name':[], 'location':[], 'log_t_250.0':[], 'dlog_t_250.0':[], 'log_t_
           'log_t_50.0':[], 'dlog_t_50.0':[], 'log_t_25.0':[], 'dlog_t_25.0':[],
           'log_t_10.0':[], 'dlog_t_10.0':[], 'log_t_5.0':[], 'dlog_t_5.0':[],
           'log_t_2.5':[], 'dlog_t_2.5':[], 'log_t_0.0':[], 'dlog_t_0.0':[]}
-
-for cons in library_groups['c71r18']['all']:
-    if cons not in corrected_medians: continue
-    if cons in library_groups['c71r18']['outliers']: continue
-    cAMP_sum['name'].append(cons_names['short_name'][cons])
-    cAMP_sum['location'].append(cons)
-    
-    for conc in ['250.0', '125.0', '50.0', '25.0', '10.0', '5.0', '2.5', '0.0']:
-        cAMP_sum['log_t_'+conc].append(np.log(corrected_medians[cons][conc]))
-        if np.isnan(corrected_medians[cons][conc]):
-            cAMP_sum['dlog_t_'+conc].append(np.NaN)
-        else:
-            cAMP_sum['dlog_t_'+conc].append(np.std(np.log(corrected_vals[cons][conc]), ddof=1))
             
 for cons in library_groups['occlusion']['all']:
     if cons in library_groups['occlusion']['outliers']: continue
@@ -217,16 +208,16 @@ oc_sum['weights'].append(np.ones_like(all_vects['occlusion']['lt-']))
 
 
 #
-for run, n in enumerate(resamplings['occlusion']['log_tmax']):
+for run, n in enumerate(resamplings['occlusion']['log_tsat']):
     oc_sum['run'].append('samp_%02d'%(run))
-    oc_sum['log_tsat'].append(resamplings['occlusion']['log_tmax'][run])
+    oc_sum['log_tsat'].append(resamplings['occlusion']['log_tsat'][run])
     oc_sum['log_tbg'].append(resamplings['occlusion']['log_tbackground'][run])
     oc_sum['log_F'].append(resamplings['occlusion']['log_F'][run])
     oc_sum['lPs'].append(resamplings['occlusion']['P_vals'][run])
     oc_sum['weights'].append(resamplings['occlusion']['sets_used'][run])
     
 for n, cons in enumerate(all_vects['occlusion']['locs']):
-    oc_sum[cons]=[]
+    oc_sum[cons+'_log_P']=[]
     oc_sum[cons+'_weight']=[]
     
 for run, m in enumerate(oc_sum['weights']):
@@ -236,9 +227,9 @@ for run, m in enumerate(oc_sum['weights']):
         weight=oc_sum['weights'][run][n]
         oc_sum[cons+'_weight'].append(weight)
         if weight==0:
-            oc_sum[cons].append(np.nan)
+            oc_sum[cons+'_log_P'].append(np.nan)
             continue
-        oc_sum[cons].append(oc_sum['lPs'][run][count])
+        oc_sum[cons+'_log_P'].append(oc_sum['lPs'][run][count])
         count+=1
         
 cols={x for x in oc_sum.keys()}
@@ -270,16 +261,16 @@ c61_sum['weights'].append(np.ones_like(all_vects['c61r18']['lt-']))
 
 
 #
-for run, n in enumerate(resamplings['c61r18']['log_tmax']):
+for run, n in enumerate(resamplings['c61r18']['log_tsat']):
     c61_sum['run'].append('samp_%02d'%(run))
-    c61_sum['log_tsat'].append(resamplings['c61r18']['log_tmax'][run])
+    c61_sum['log_tsat'].append(resamplings['c61r18']['log_tsat'][run])
     c61_sum['log_tbg'].append(resamplings['c61r18']['log_tbackground'][run])
     c61_sum['log_alphap'].append(resamplings['c61r18']['log_alphap'][run])
     c61_sum['lPs'].append(resamplings['c61r18']['P_vals'][run])
     c61_sum['weights'].append(resamplings['c61r18']['sets_used'][run])
     
 for n, cons in enumerate(all_vects['c61r18']['locs']):
-    c61_sum[cons]=[]
+    c61_sum[cons+'_log_P']=[]
     c61_sum[cons+'_weight']=[]
     
 for run, m in enumerate(c61_sum['weights']):
@@ -289,9 +280,9 @@ for run, m in enumerate(c61_sum['weights']):
         weight=c61_sum['weights'][run][n]
         c61_sum[cons+'_weight'].append(weight)
         if weight==0:
-            c61_sum[cons].append(np.nan)
+            c61_sum[cons+'_log_P'].append(np.nan)
             continue
-        c61_sum[cons].append(c61_sum['lPs'][run][count])
+        c61_sum[cons+'_log_P'].append(c61_sum['lPs'][run][count])
         count+=1
         
 cols={x for x in c61_sum.keys()}
@@ -357,7 +348,7 @@ for val in resamplings.keys():
     conj_sum[val]=[]
     
 fit_vals=fits['conj']['x']
-fit_terms=['log_tmax',
+fit_terms=['log_tsat',
            'log_tbg_'+all_vects['conj']['curve_list'][0],
            'log_tbg_'+all_vects['conj']['curve_list'][1],
            'log_tbg_'+all_vects['conj']['curve_list'][2],
@@ -392,7 +383,7 @@ conj_sum['P_vals'].append(fit_vals[:-len(fit_terms)])
 conj_sum['sets_used'].append(weight_test)
 
 
-for run, n in enumerate(resamplings['log_tmax']):
+for run, n in enumerate(resamplings['log_tsat']):
     conj_sum['run'].append('samp_%02d'%(run))
     
     for term in fit_terms:

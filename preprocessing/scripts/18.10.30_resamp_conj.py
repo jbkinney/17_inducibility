@@ -384,7 +384,7 @@ for cond in init_param_exp:
 conj_terms_split={}
 conj_inits=[]
 
-columns=['log_tmax', 
+columns=['log_tsat', 
          'log_tbg_'+all_vects['conj']['curve_list'][0],
          'log_tbg_'+all_vects['conj']['curve_list'][1],
          'log_tbg_'+all_vects['conj']['curve_list'][2],
@@ -436,7 +436,7 @@ if recalc:
     
     lthetas, lsets_used, lpvals = boot_resampler_conj(cycles)
     
-    resamp=pd.DataFrame(lthetas, columns=['log_tmax',
+    resamp=pd.DataFrame(lthetas, columns=['log_tsat',
                                           'log_tbg_'+all_vects['conj']['curve_list'][0],
                                           'log_tbg_'+all_vects['conj']['curve_list'][1],
                                           'log_tbg_'+all_vects['conj']['curve_list'][2],

@@ -113,7 +113,7 @@ for spac in curves:
 
 resamplings=pd.read_pickle('../intermediates/weighted_conjoined_thetas_100.pkl')
 
-ltsat=np.percentile(resamplings['log_tmax'], 50)
+ltsat=np.percentile(resamplings['log_tsat'], 50)
 
 #calcs log of tau basal from same givens as above
 def comp_ltaub(lrn,lthetas): 

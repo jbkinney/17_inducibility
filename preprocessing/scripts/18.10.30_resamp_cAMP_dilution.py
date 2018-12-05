@@ -120,7 +120,7 @@ resamplings={}
 resamplings['occlusion']=pd.read_pickle('../intermediates/weighted_occlusion_thetas_100.pkl')
 resamplings['conjoined']=pd.read_pickle('../intermediates/weighted_conjoined_thetas_100.pkl')
 
-ltsat=np.log(np.percentile(np.exp(resamplings['conjoined']['log_tmax']),50))
+ltsat=np.log(np.percentile(np.exp(resamplings['conjoined']['log_tsat']),50))
 ltbg_c71=np.log(np.percentile(np.exp(resamplings['conjoined']['log_tbg_c71r18']),50))
 lalphap_c71=np.log(np.percentile(np.exp(resamplings['conjoined']['log_alphap_c71r18']),50))
 ltbg_ocl=np.log(np.percentile(np.exp(resamplings['occlusion']['log_tbackground']),50))
